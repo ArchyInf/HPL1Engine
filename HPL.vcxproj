@@ -582,6 +582,11 @@
     <ClCompile Include="sources\gui\WidgetTextBox.cpp" />
     <ClCompile Include="sources\gui\WidgetWindow.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OALWrapper\OALWrapper.vcxproj">
+      <Project>{6f50ed2a-585c-4b70-a595-69e149364a8e}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
