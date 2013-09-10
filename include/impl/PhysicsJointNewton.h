@@ -88,7 +88,7 @@ namespace hpl {
 
 	protected:
 		NewtonJoint* mpNewtonJoint;
-		const NewtonWorld* mpNewtonWorld;
+		NewtonWorld* mpNewtonWorld;
 		NewtonBody* mpNewtonParentBody;
 		NewtonBody* mpNewtonChildBody;
 	};

@@ -21,7 +21,7 @@
 #include "system/String.h"
 #include "scene/World3D.h"
 #include "system/LowLevelSystem.h"
-#include "tinyxml.h"
+#include "impl/tinyXML/tinyxml.h"
 
 #include "physics/PhysicsWorld.h"
 #include "physics/PhysicsBody.h"
@@ -687,6 +687,13 @@ namespace hpl {
 
 		bool bPushedByCharacterGravity = cString::ToBool(apPhysicsElem->Attribute("PushedByCharacterGravity"),false);
 
+		float fAutoDisableLinearThreshold = cString::ToFloat(apPhysicsElem->Attribute("AutoDisableLinearThreshold"),
+															0.1f);
+		float fAutoDisableAngularThreshold = cString::ToFloat(apPhysicsElem->Attribute("AutoDisableAngularThreshold"),
+															0.1f);
+		int lAutoDisableNumSteps = cString::ToInt(apPhysicsElem->Attribute("AutoDisableNumSteps"),
+															10);
+
 		bool bVolatile = cString::ToBool(apPhysicsElem->Attribute("Volatile"),false);
 
 		bool bCanAttachCharacter = cString::ToBool(apPhysicsElem->Attribute("CanAttachCharacter"),false);
@@ -707,6 +714,10 @@ namespace hpl {
 		apBody->SetCanAttachCharacter(bCanAttachCharacter);
 		
 		apBody->SetContinuousCollision(bContinuousCollision);
+		
+		apBody->SetAutoDisableLinearThreshold(fAutoDisableLinearThreshold);
+		apBody->SetAutoDisableAngularThreshold(fAutoDisableAngularThreshold);
+		apBody->SetAutoDisableNumSteps(lAutoDisableNumSteps);
 		
 		apBody->SetPushedByCharacterGravity(bPushedByCharacterGravity);
 

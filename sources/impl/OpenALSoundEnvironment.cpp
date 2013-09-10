@@ -17,7 +17,7 @@
  * along with HPL1 Engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include "impl/OpenALSoundEnvironment.h"
-#include "tinyxml.h"
+#include "impl/tinyXML/tinyxml.h"
 
 namespace hpl
 {

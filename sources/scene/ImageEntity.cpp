@@ -27,7 +27,7 @@
 #include "graphics/ImageEntityData.h"
 #include "resources/ImageEntityManager.h"
 #include "graphics/GraphicsTypes.h"
-#include "tinyxml.h"
+#include "impl/tinyXML/tinyxml.h"
 
 
 

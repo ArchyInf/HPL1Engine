@@ -28,7 +28,7 @@
 #include "haptic/HapticSurface.h"
 #include "haptic/LowLevelHaptic.h"
 
-#include "tinyxml.h"
+#include "impl/tinyXML/tinyxml.h"
 
 namespace hpl {
 

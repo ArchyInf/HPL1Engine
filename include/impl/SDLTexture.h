@@ -24,7 +24,7 @@
 #include "impl/LowLevelGraphicsSDL.h"
 #include "impl/SDLBitmap2D.h"
 
-#include <GLee.h>
+#include <GL/GLee.h>
 #if defined(__APPLE__)&&defined(__MACH__)
 #include <OpenGL/glu.h>
 #else

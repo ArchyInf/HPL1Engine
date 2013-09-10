@@ -895,23 +895,13 @@ namespace hpl {
 			//MAYBE TODO: Fix so that the shadows from different edges share vertices
 
 			// Add vertexes and indexes to the vertex batcher
-			/*
-			 * My compiler was giving errors about taking address of a temporary
-			 * for these vertexes. Don't these go out of scope before they're used?
-			 *
-			 */
-			cVertex lvtPos0(vPointPos[0], ShadowColor);
-			cVertex lvtPos1(vPointPos[1], ShadowColor);
-			cVertex lvtEndPos0(vEndPos[0], ShadowColor);
-			cVertex lvtEndPos1(vEndPos[1], ShadowColor);
-
-			mpLowLevelGraphics->AddVertexToBatch(&lvtPos0);
-			mpLowLevelGraphics->AddVertexToBatch(&lvtPos1);
+			mpLowLevelGraphics->AddVertexToBatch(&cVertex(vPointPos[0],ShadowColor));
+			mpLowLevelGraphics->AddVertexToBatch(&cVertex(vPointPos[1],ShadowColor));
 			mpLowLevelGraphics->AddIndexToBatch(lFirstIndex);
 			mpLowLevelGraphics->AddIndexToBatch(lFirstIndex+1);
 
-			mpLowLevelGraphics->AddVertexToBatch(&lvtEndPos0);
-			mpLowLevelGraphics->AddVertexToBatch(&lvtEndPos1);
+			mpLowLevelGraphics->AddVertexToBatch(&cVertex(vEndPos[0],ShadowColor));
+			mpLowLevelGraphics->AddVertexToBatch(&cVertex(vEndPos[1],ShadowColor));
 			mpLowLevelGraphics->AddIndexToBatch(lFirstIndex+2);
 
 			mpLowLevelGraphics->AddIndexToBatch(lFirstIndex+1);
@@ -930,8 +920,7 @@ namespace hpl {
 
 			//If we had an extra point one for triangle is needed.
 			if(bExtraPos){
-				cVertex lvtExtraPos(vExtraPos,ShadowColor);
-				mpLowLevelGraphics->AddVertexToBatch(&lvtExtraPos);
+				mpLowLevelGraphics->AddVertexToBatch(&cVertex(vExtraPos,ShadowColor));
 
 				mpLowLevelGraphics->AddIndexToBatch(lFirstIndex+3);
 				mpLowLevelGraphics->AddIndexToBatch(lFirstIndex+2);

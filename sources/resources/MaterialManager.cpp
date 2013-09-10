@@ -25,7 +25,7 @@
 #include "graphics/Material.h"
 #include "system/LowLevelSystem.h"
 #include "graphics/MaterialHandler.h"
-#include "tinyxml.h"
+#include "impl/tinyXML/tinyxml.h"
 
 
 
