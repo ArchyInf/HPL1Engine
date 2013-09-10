@@ -5,3 +5,7 @@
 /*.xcodeproj/*.pbxuser
 /assets/*.log
 /assets/core/cache/*collcach
+
+intermediate
+*.sdf
+*.v11.suo
