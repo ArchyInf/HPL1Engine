@@ -883,6 +883,9 @@
       <Filter>Gui</Filter>
     </ClInclude>
     <ClInclude Include="include\HPL.h" />
+    <ClInclude Include="include\graphics\Renderer3DStereo.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\system\Container.cpp">
@@ -1577,6 +1580,9 @@
     </ClCompile>
     <ClCompile Include="sources\gui\WidgetWindow.cpp">
       <Filter>Gui</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\graphics\Renderer3DStereo.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

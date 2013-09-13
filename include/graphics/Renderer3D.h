@@ -134,11 +134,11 @@ namespace hpl {
 	public:
 		cRenderer3D(iLowLevelGraphics *apLowLevelGraphics,cResources* apResources,
 						cMeshCreator* apMeshCreator, cRenderList *apRenderList);
-		~cRenderer3D();
+		virtual ~cRenderer3D();
 
 		void UpdateRenderList(cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime);
 
-		void RenderWorld(cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime);
+		virtual void RenderWorld(cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime);
 
 		void SetSkyBox(iTexture *apTexture, bool abAutoDestroy);
 		void SetSkyBoxActive(bool abX);
