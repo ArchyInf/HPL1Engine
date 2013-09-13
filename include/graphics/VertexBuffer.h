@@ -165,4 +165,4 @@ namespace hpl {
 	};
 
 };
-#endif // HPL_RENDERER3D_H
+#endif // HPL_VERTEXBUFFER_H
