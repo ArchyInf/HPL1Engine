@@ -70,7 +70,6 @@ namespace hpl {
 		cRenderer2D* mpRenderer2D;
 		cRenderer3D* mpRenderer3D;
 		cRendererPostEffects* mpRendererPostEffects;
-		cRenderList *mpRenderList;
 	};
 
 };

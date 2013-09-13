@@ -64,12 +64,12 @@ namespace hpl {
 
 	//-----------------------------------------------------------------------
 
-	cRenderer3D::cRenderer3D(iLowLevelGraphics *apLowLevelGraphics,cResources* apResources,
-							cMeshCreator* apMeshCreator, cRenderList *apRenderList)
+	cRenderer3D::cRenderer3D( iLowLevelGraphics *apLowLevelGraphics, cResources* apResources, cMeshCreator* apMeshCreator )
 	{
 		Log("  Creating Renderer3D\n");
-
 		
+		mpRenderList = NULL;
+
 		mpLowLevelGraphics = apLowLevelGraphics;
 		mpLowLevelResources = apResources->GetLowLevel();
 		mpResources = apResources;
@@ -81,9 +81,7 @@ namespace hpl {
 		mSkyBoxColor = cColor(1,1);
 
 		mRenderSettings.mAmbientColor = cColor(0,1);
-
-		mpRenderList = apRenderList;
-
+		
 		mDebugFlags = 0;
 
 		mbLog = false;
@@ -315,63 +313,26 @@ namespace hpl {
 
 		Clear();
 	}
-
-	//-----------------------------------------------------------------------
-
-	void cRenderer3D::ClearRenderList()
-	{ 
-		mpRenderList->Clear(); 
-	}
-	
+		
 	//-----------------------------------------------------------------------
 
 	eRendererShowShadows cRenderer3D::GetShowShadows()
 	{
 		return mRenderSettings.mShowShadows;
 	}
+
 	void cRenderer3D::SetShowShadows(eRendererShowShadows aState)
 	{
 		mRenderSettings.mShowShadows = aState;
 	}
-
+	
 	//-----------------------------------------------------------------------
 
-
-	void cRenderer3D::UpdateRenderList(cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime)
-	{
-		//Clear all objects to be rendereded
-		mpRenderList->Clear();
-
-		//Set some variables
-		mpRenderList->SetFrameTime(afFrameTime);
-		mpRenderList->SetCamera(apCamera);
-
-		//Set the frustum
-		mRenderSettings.mpFrustum = apCamera->GetFrustum();
-
-		//Setup fog BV
-		if(mRenderSettings.mbFogActive && mRenderSettings.mbFogCulling)
-		{
-			//This is becuase the fog line is a stright line infront of the camera.
-			float fCornerDist = (mRenderSettings.mfFogEnd *2.0f) /
-								cos(apCamera->GetFOV()*apCamera->GetAspect()*0.5f);
-
-			mFogBV.SetSize(fCornerDist);
-			mFogBV.SetPosition(apCamera->GetPosition());
-		}
-
-		//Add all objects to be rendered
-		apWorld->GetRenderContainer()->GetVisible(mRenderSettings.mpFrustum, mpRenderList);
-
-		//Compile an optimized render list.
-		mpRenderList->Compile();
-	}
-
-	//-----------------------------------------------------------------------
-
-	void cRenderer3D::RenderWorld(cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime)
+	void cRenderer3D::RenderWorld(cWorld3D* apWorld, cCamera3D* apCamera, cRenderList* apRenderList, float afFrameTime)
 	{
 		mfRenderTime += afFrameTime;
+
+		mpRenderList = apRenderList;
 
 		//////////////////////////////
 		//Setup render settings and logging
@@ -467,6 +428,8 @@ namespace hpl {
 		RenderDebug(apCamera);
 
 		mpLowLevelGraphics->SetDepthWriteActive(true);
+
+		mpRenderList = NULL;
 	}
 
 	//-----------------------------------------------------------------------
@@ -528,28 +491,6 @@ namespace hpl {
 	void cRenderer3D::SetFogEnd(float afX)
 	{
 		mRenderSettings.mfFogEnd = afX;
-	}
-
-	//-----------------------------------------------------------------------
-
-	void cRenderer3D::FetchOcclusionQueries()
-	{
-		if(mbLog) Log("Fetching Occlusion Queries Result:\n");
-
-		//With depth test
-		cOcclusionQueryObjectIterator it = mpRenderList->GetQueryIterator();
-		while(it.HasNext())
-		{
-			cOcclusionQueryObject *pObject = it.Next();
-			//LogUpdate("Query: %d!\n",pObject->mpQuery);
-
-			while(pObject->mpQuery->FetchResults()==false);
-
-			if(mbLog) Log(" Query: %d SampleCount: %d\n",	pObject->mpQuery,
-															pObject->mpQuery->GetSampleCount());
-		}
-
-		if(mbLog) Log("Done fetching queries\n");
 	}
 
 	//-----------------------------------------------------------------------

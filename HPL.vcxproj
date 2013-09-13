@@ -81,7 +81,6 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="include\graphics\Renderer3DStereo.h" />
     <ClInclude Include="include\system\BinTree.h" />
     <ClInclude Include="include\system\Container.h" />
     <ClInclude Include="include\system\LogicTimer.h" />
@@ -355,7 +354,6 @@
     <ClInclude Include="include\HPL.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="sources\graphics\Renderer3DStereo.cpp" />
     <ClCompile Include="sources\system\Container.cpp" />
     <ClCompile Include="sources\system\LogicTimer.cpp" />
     <ClCompile Include="sources\system\MemoryManager.cpp" />

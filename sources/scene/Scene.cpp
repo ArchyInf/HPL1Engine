@@ -43,6 +43,9 @@
 #include "resources/FileSearcher.h"
 #include "resources/MeshLoaderHandler.h"
 
+#include "scene/World3D.h"
+#include "scene/RenderableContainer.h"
+
 namespace hpl {
 
 	//////////////////////////////////////////////////////////////////////////
@@ -73,6 +76,9 @@ namespace hpl {
 		mbUpdateMap = true;
 
 		mpActiveCamera = NULL;
+
+		// todo: for multiple view points a seperate class that manages the viewpoints + RenderLists should be added
+		mpRenderList = hplNew( cRenderList, (apGraphics) );
 	}
 
 	//-----------------------------------------------------------------------
@@ -81,6 +87,9 @@ namespace hpl {
 	{
 		Log("Exiting Scene Module\n");
 		Log("--------------------------------------------------------\n");
+		
+		// todo: for multiple view points a seperate class that manages the viewpoints + RenderLists should be added
+		hplDelete( mpRenderList );
 
 		STLDeleteAll(mlstWorld3D);
 		STLDeleteAll(mlstCamera);
@@ -251,6 +260,13 @@ namespace hpl {
 
 	//-----------------------------------------------------------------------
 
+	void cScene::ClearRenderList( )
+	{
+		mpRenderList->Clear();
+	}
+
+	//-----------------------------------------------------------------------
+
 	void cScene::UpdateRenderList(float afFrameTime)
 	{
 		if(mbDrawScene && mpActiveCamera)
@@ -260,9 +276,31 @@ namespace hpl {
 				cCamera3D* pCamera3D = static_cast<cCamera3D*>(mpActiveCamera);
 
 				if(mpCurrentWorld3D)
-					mpGraphics->GetRenderer3D()->UpdateRenderList(mpCurrentWorld3D, pCamera3D,afFrameTime);
+					UpdateRenderList( mpRenderList, mpCurrentWorld3D, pCamera3D, afFrameTime );
 			}
 		}
+	}
+	
+	//-----------------------------------------------------------------------
+
+	void cScene::FetchOcclusionQueries()
+	{
+		//if(mbLog) Log("Fetching Occlusion Queries Result:\n");
+
+		//With depth test
+		cOcclusionQueryObjectIterator it = mpRenderList->GetQueryIterator();
+		while(it.HasNext())
+		{
+			cOcclusionQueryObject *pObject = it.Next();
+			//LogUpdate("Query: %d!\n",pObject->mpQuery);
+
+			while(pObject->mpQuery->FetchResults()==false);
+
+			//if(mbLog) Log(" Query: %d SampleCount: %d\n",	pObject->mpQuery,
+			//												pObject->mpQuery->GetSampleCount());
+		}
+
+		//if(mbLog) Log("Done fetching queries\n");
 	}
 
 	//-----------------------------------------------------------------------
@@ -270,7 +308,7 @@ namespace hpl {
 	void cScene::SetDrawScene(bool abX)
 	{
 		mbDrawScene = abX;
-		mpGraphics->GetRenderer3D()->ClearRenderList();
+		ClearRenderList();
 	}
 
 	//-----------------------------------------------------------------------
@@ -298,7 +336,7 @@ namespace hpl {
 				if(mpCurrentWorld3D)
 				{
 					START_TIMING(RenderWorld)
-					mpGraphics->GetRenderer3D()->RenderWorld(mpCurrentWorld3D, pCamera3D,afFrameTime);
+					mpGraphics->GetRenderer3D()->RenderWorld(mpCurrentWorld3D, pCamera3D, mpRenderList, afFrameTime);
 					STOP_TIMING(RenderWorld)
 				}
 			}
@@ -307,7 +345,7 @@ namespace hpl {
 			STOP_TIMING(PostSceneDraw)
 			
 			START_TIMING(PostEffects)
-			mpGraphics->GetRendererPostEffects()->Render();
+			mpGraphics->GetRendererPostEffects()->Render(mpRenderList);
 			STOP_TIMING(PostEffects)
 		}
 		else
@@ -539,4 +577,46 @@ namespace hpl {
 	}
 
 	//-----------------------------------------------------------------------
-}
+
+	//////////////////////////////////////////////////////////////////////////
+	// PRIVATE METHODS
+	//////////////////////////////////////////////////////////////////////////
+
+	//-----------------------------------------------------------------------
+	
+	void cScene::UpdateRenderList(cRenderList* apRenderList, cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime)
+	{
+		//Clear all objects to be rendereded
+		apRenderList->Clear();
+
+		//Set some variables
+		apRenderList->SetFrameTime(afFrameTime);
+		apRenderList->SetCamera(apCamera);
+
+		//Set the frustum
+		cFrustum* pFrustum = apCamera->GetFrustum();
+		cRenderSettings* pRenderSettings = mpGraphics->GetRenderer3D()->GetRenderSettings();
+		pRenderSettings->mpFrustum = apCamera->GetFrustum();
+
+		//Setup fog BV
+
+		// todo: multiple viewpoints; do not handle rendersettings in Renderer3D
+		// todo: mFogBV
+		//if(pRenderSettings->mbFogActive && pRenderSettings->mbFogCulling)
+		//{
+		//	//This is becuase the fog line is a stright line infront of the camera.
+		//	float fCornerDist = (pRenderSettings->mfFogEnd *2.0f) /
+		//						cos(apCamera->GetFOV()*apCamera->GetAspect()*0.5f);
+		//	
+		//	mFogBV.SetSize(fCornerDist);
+		//	mFogBV.SetPosition(apCamera->GetPosition());
+		//}
+
+		//Add all objects to be rendered
+		apWorld->GetRenderContainer()->GetVisible(pFrustum, apRenderList);
+
+		//Compile an optimized render list.
+		apRenderList->Compile();
+	}
+}	
+	

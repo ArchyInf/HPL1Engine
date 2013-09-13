@@ -132,13 +132,10 @@ namespace hpl {
 	class cRenderer3D
 	{
 	public:
-		cRenderer3D(iLowLevelGraphics *apLowLevelGraphics,cResources* apResources,
-						cMeshCreator* apMeshCreator, cRenderList *apRenderList);
+		cRenderer3D( iLowLevelGraphics *apLowLevelGraphics, cResources* apResources, cMeshCreator* apMeshCreator);
 		virtual ~cRenderer3D();
 
-		void UpdateRenderList(cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime);
-
-		virtual void RenderWorld(cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime);
+		virtual void RenderWorld(cWorld3D* apWorld, cCamera3D* apCamera, cRenderList* apRenderList, float afFrameTime);
 
 		void SetSkyBox(iTexture *apTexture, bool abAutoDestroy);
 		void SetSkyBoxActive(bool abX);
@@ -175,19 +172,16 @@ namespace hpl {
 		cBoundingVolume* GetFogBV(){return &mFogBV;}
 
 		void SetPostEffects(cRendererPostEffects *apPostEffects){ mpPostEffects = apPostEffects;}
-
+		cRendererPostEffects* GetPostEffects() { return mpPostEffects; }
 		
 		//Debug setup
 		void SetDebugFlags(tRendererDebugFlag aFlags){ mDebugFlags = aFlags;}
 		tRendererDebugFlag GetDebugFlags(){ return mDebugFlags;}
 
-		void ClearRenderList();
 		cRenderSettings* GetRenderSettings(){return &mRenderSettings;}
 
 		eRendererShowShadows GetShowShadows();
 		void SetShowShadows(eRendererShowShadows aState);
-
-		void FetchOcclusionQueries();
 	
 	private:
 		inline void BeginRendering(cCamera3D* apCamera);
@@ -247,7 +241,6 @@ namespace hpl {
 		tVertexVec mvVtxRect;
 
 		cMeshCreator* mpMeshCreator;
-		cRenderList *mpRenderList;
 		
 		iVertexBuffer* mpSkyBox;
 		iTexture* mpSkyBoxTexture;
@@ -258,6 +251,9 @@ namespace hpl {
 		cResources* mpResources;
 		
 		tRendererDebugFlag mDebugFlags;
+
+	protected:
+		cRenderList *mpRenderList;
 	};
 
 };

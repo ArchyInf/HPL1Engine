@@ -37,8 +37,7 @@ namespace hpl {
 
 	//-----------------------------------------------------------------------
 
-	cRendererPostEffects::cRendererPostEffects(iLowLevelGraphics *apLowLevelGraphics,cResources* apResources,
-												cRenderList *apRenderList,cRenderer3D *apRenderer3D)
+	cRendererPostEffects::cRendererPostEffects(iLowLevelGraphics *apLowLevelGraphics,cResources* apResources, cRenderer3D *apRenderer3D)
 	{
 		mpLowLevelGraphics = apLowLevelGraphics;
 		mpLowLevelResources = apResources->GetLowLevel();
@@ -49,7 +48,7 @@ namespace hpl {
 		
 		mvScreenSize = mpLowLevelGraphics->GetScreenSize();
 
-		mpRenderList = apRenderList;
+		mpRenderList = NULL;
 
 		///////////////////////////////////////////
 		// Create screen buffers
@@ -247,8 +246,10 @@ namespace hpl {
 	
 	//-----------------------------------------------------------------------
 	
-	void cRendererPostEffects::Render()
+	void cRendererPostEffects::Render( cRenderList* apRenderList )
 	{
+		mpRenderList = apRenderList;
+
 		if(mpScreenBuffer[0] == NULL || mpScreenBuffer[1] == NULL) return;
 		if(!mpLowLevelGraphics->GetCaps(eGraphicCaps_TextureTargetRectangle)) return;
 		
@@ -274,6 +275,8 @@ namespace hpl {
         RenderImageTrail();		
 		
 		mpLowLevelGraphics->PopMatrix(eMatrix_ModelView);
+
+		mpRenderList = NULL;
 	}
 
 	//-----------------------------------------------------------------------

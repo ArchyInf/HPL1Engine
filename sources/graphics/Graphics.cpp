@@ -88,7 +88,6 @@ namespace hpl {
 		hplDelete(mpDrawer);
 		hplDelete(mpMeshCreator);
 		hplDelete(mpMaterialHandler);
-		hplDelete(mpRenderList);
 
 		Log("--------------------------------------------------------\n\n");
 	}
@@ -119,11 +118,10 @@ namespace hpl {
 		mpMaterialHandler = hplNew( cMaterialHandler,(this, apResources));
 		mpDrawer = hplNew( cGraphicsDrawer,(mpLowLevelGraphics,mpMaterialHandler,apResources));
 		mpRenderer2D = hplNew( cRenderer2D,(mpLowLevelGraphics,apResources,mpDrawer));
-		mpRenderList = hplNew( cRenderList,(this));
 		mpMeshCreator = hplNew( cMeshCreator,(mpLowLevelGraphics, apResources));
-		mpRenderer3D = hplNew( cRenderer3D,(mpLowLevelGraphics,apResources,mpMeshCreator,mpRenderList));
-		mpRendererPostEffects = hplNew( cRendererPostEffects,(mpLowLevelGraphics,apResources,mpRenderList,
-														mpRenderer3D));
+
+		mpRenderer3D = hplNew( cRenderer3D,(mpLowLevelGraphics,apResources,mpMeshCreator));
+		mpRendererPostEffects = hplNew( cRendererPostEffects,(mpLowLevelGraphics,apResources, mpRenderer3D));
 		mpRenderer3D->SetPostEffects(mpRendererPostEffects);
 		
 		

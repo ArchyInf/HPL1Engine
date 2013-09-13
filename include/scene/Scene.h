@@ -44,6 +44,7 @@ namespace hpl {
 	class cUpdater;
 	class cWorld3D;
 	class cWorld2D;
+	class cRenderList;
 		
 	typedef std::list<iCamera*> tCameraList;
 	typedef tCameraList::iterator tCameraListIt;
@@ -64,6 +65,9 @@ namespace hpl {
 		* Called by cGame
 		*/
 		void UpdateRenderList(float afFrameTime);
+		void ClearRenderList( );
+		void FetchOcclusionQueries();
+
 		/**
 		 * Called by cGame
 		 */
@@ -129,6 +133,8 @@ namespace hpl {
 		cSystem* GetSystem(){ return mpSystem;}
 
 	private:
+		void UpdateRenderList(cRenderList* apRenderList, cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime);
+
         cGraphics *mpGraphics;
 		cResources *mpResources;
 		cSound *mpSound;
@@ -154,6 +160,8 @@ namespace hpl {
 		tScriptVarMap m_mapGlobalVars;
 
 		tStringSet m_setLoadedMaps;
+
+		cRenderList* mpRenderList;
 	};
 
 };

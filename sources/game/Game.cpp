@@ -436,7 +436,7 @@ namespace hpl {
 				//Log("Swap done: %d\n", GetApplicationTime());
 				//if(mbRenderOnce)
 				{
-					mpGraphics->GetRenderer3D()->FetchOcclusionQueries();
+					mpScene->FetchOcclusionQueries();
 					mpUpdater->OnPostBufferSwap();
 				}
 				

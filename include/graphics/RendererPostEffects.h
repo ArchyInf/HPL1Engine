@@ -67,14 +67,13 @@ namespace hpl {
 	class cRendererPostEffects
 	{
 	public:
-		cRendererPostEffects(iLowLevelGraphics *apLowLevelGraphics,cResources* apResources, 
-							cRenderList *apRenderList, cRenderer3D *apRenderer3D);
+		cRendererPostEffects(iLowLevelGraphics *apLowLevelGraphics,cResources* apResources, cRenderer3D *apRenderer3D);
 		~cRendererPostEffects();
 		
 		/**
 		 * Render post effects, called by cScene
 		 */
-		void Render();
+		void Render( cRenderList* apRenderList );
 
 		void SetImageTrailActive(bool abX){
 			if(!mImageTrailData.mbActive && abX) mImageTrailData.mbFirstPass = true;
@@ -118,7 +117,7 @@ namespace hpl {
 		iTexture* GetFreeScreenTexture(){ return mpScreenBuffer[mImageTrailData.mlCurrentBuffer==0?1:0];}
 		
 		void RenderBlurTexture(iTexture *apDestination, iTexture *apSource,float afBlurAmount);
-
+		
 	private:
 		void RenderImageTrail();
 
