@@ -181,7 +181,7 @@ namespace hpl {
 		void SetDebugFlags(tRendererDebugFlag aFlags){ mDebugFlags = aFlags;}
 		tRendererDebugFlag GetDebugFlags(){ return mDebugFlags;}
 
-		cRenderList* GetRenderList(){ return mpRenderList;}
+		void ClearRenderList();
 		cRenderSettings* GetRenderSettings(){return &mRenderSettings;}
 
 		eRendererShowShadows GetShowShadows();

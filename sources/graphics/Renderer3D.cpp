@@ -318,6 +318,13 @@ namespace hpl {
 
 	//-----------------------------------------------------------------------
 
+	void cRenderer3D::ClearRenderList()
+	{ 
+		mpRenderList->Clear(); 
+	}
+	
+	//-----------------------------------------------------------------------
+
 	eRendererShowShadows cRenderer3D::GetShowShadows()
 	{
 		return mRenderSettings.mShowShadows;

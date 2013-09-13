@@ -270,7 +270,7 @@ namespace hpl {
 	void cScene::SetDrawScene(bool abX)
 	{
 		mbDrawScene = abX;
-		mpGraphics->GetRenderer3D()->GetRenderList()->Clear();
+		mpGraphics->GetRenderer3D()->ClearRenderList();
 	}
 
 	//-----------------------------------------------------------------------
