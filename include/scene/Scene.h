@@ -44,7 +44,7 @@ namespace hpl {
 	class cUpdater;
 	class cWorld3D;
 	class cWorld2D;
-	class cRenderList;
+	class cRenderCoordinator;
 		
 	typedef std::list<iCamera*> tCameraList;
 	typedef tCameraList::iterator tCameraListIt;
@@ -83,7 +83,7 @@ namespace hpl {
 		tStringSet* GetLoadedMapsSet(){ return &m_setLoadedMaps;}
 
 		void SetDrawScene(bool abX);
-		bool GetDrawScene(){ return mbDrawScene;}
+		bool GetDrawScene();
 
 		///// SCRIPT VAR METHODS ////////////////////
 
@@ -133,8 +133,6 @@ namespace hpl {
 		cSystem* GetSystem(){ return mpSystem;}
 
 	private:
-		void UpdateRenderList(cRenderList* apRenderList, cWorld3D* apWorld, cCamera3D* apCamera, float afFrameTime);
-
         cGraphics *mpGraphics;
 		cResources *mpResources;
 		cSound *mpSound;
@@ -145,7 +143,6 @@ namespace hpl {
 
         cCollider2D *mpCollider2D;
 
-		bool mbDrawScene;
 		bool mbUpdateMap;
 
 		tWorld3DList mlstWorld3D;
@@ -161,7 +158,7 @@ namespace hpl {
 
 		tStringSet m_setLoadedMaps;
 
-		cRenderList* mpRenderList;
+		cRenderCoordinator* mpRenderCoordinator;
 	};
 
 };
